@@ -1,11 +1,18 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
 Description: AWS Serverless Storage Security
+
+Parameters:
+  SNSTopic:
+    Type: String
+    Description: The SNS Topic to connect Trend Micro Storage Security with Lambda, Specify an existing SNS Topic
+    
+
 Resources:
   filterBucketObjactsLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub ${AWS::StackName}-filterBucketObjactsLambda
+      FunctionName: filter_bucket_objacts_lambda
       CodeUri: s3://aws-serverless-storage-security-filter-bucket-objects/filter_bucket_objects_1.0.0.zip
       Handler: lambda_function.lambda_handler
       Runtime: python3.8
@@ -25,28 +32,19 @@ Resources:
         SNS1:
           Type: SNS
           Properties:
-            Topic:
-              Ref: SNSTopic1
+            Topic: !Ref SNSTopic
 
   fsspromote:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: fsspromote
+      BucketName: fbopromote
 
   fssquarantine:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: fssquarantine
+      BucketName: fboquarantine
 
-  SNSTopic1:
-    Type: 'AWS::SNS::Topic'
 
-  MySubscription:
-    Type: AWS::SNS::Subscription
-    Properties:
-      Endpoint: test@example.com
-      Protocol: email
-      TopicArn: !Ref SNSTopic1
 
 
 
