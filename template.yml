@@ -5,6 +5,7 @@ Description: AWS Serverless Storage Security
 Parameters:
   SNSTopic:
     Type: String
+    Default: Testing
     Description: The SNS Topic to connect Trend Micro Storage Security with Lambda, Specify an existing SNS Topic
     
 
